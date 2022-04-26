@@ -1,0 +1,13 @@
+.menuBar-drawer {
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+  }
+}
+
+.menuBar {
+  @media screen and (min-width: 576px) {
+    display: none;
+  }
+
+  margin-right: 10px;
+}

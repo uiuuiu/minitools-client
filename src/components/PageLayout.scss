@@ -1,0 +1,104 @@
+.page-layout {
+  @media screen and (min-width: 1200px) {
+    max-width: 1180px;
+    margin: auto;
+  }
+
+  .background-img {
+    background: linear-gradient(180deg,#002342,#0bc9e3 132.49%);
+    background-attachment: fixed;
+    background-color: #002342;
+    background-size: cover;
+    bottom: 0;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: -1;
+  }
+
+  header {
+    background: #fff;
+    padding: 5px;
+    min-height: 64px;
+    height: auto;
+
+    .logo-col {
+      @media screen and (max-width: 576px) {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .logo {
+        width: 66px;
+        height: 66px;
+        margin: 10px;
+      }
+    }
+
+    .header-right {
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 20px;
+      display: flex;
+
+      @media screen and (max-width: 576px) {
+        display: none;
+      }
+
+      .auth-button {
+        color: white;
+        font-weight: bold;
+      }
+
+      .logout-button {
+        background-color: #208838;
+      }
+
+      .login-button {
+        background-color: #3FA9FF;
+      }
+    }
+  }
+
+  .main-content {
+    padding: 50px 50px;
+    display: flex;
+
+    @media screen and (max-width: 576px) {
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .apps-card {
+      width: 20%;
+      border-radius: 10px 0px 0px 10px;
+
+      .ant-menu {
+        border-right: 0px;
+      }
+
+      @media screen and (max-width: 576px) {
+        width: 100%;
+        overflow: scroll;
+        border-radius: 0;
+      }
+    }
+
+    .app-content {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      border-radius: 0px 10px 10px 0px;
+
+      .ant-card-body {
+        padding: 0
+      }
+
+      @media screen and (max-width: 576px) {
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+  }
+}
