@@ -1,0 +1,15 @@
+.redirect-short-link-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .redirect-short-link-spin {
+    margin-top: 20px;
+  }
+}
+
+.redirect-short-link-counter {
+  font-weight: bold;
+  font-size: large;
+}
