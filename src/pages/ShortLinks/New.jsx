@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Checkbox, Button } from "antd";
-import { EllipsisOutlined } from "@ant-design/icons";
+import { EllipsisOutlined, LeftOutlined } from "@ant-design/icons";
 
 // import { useForm } from "react-hook-form";
 import apis from "../../apis";
@@ -32,7 +32,7 @@ export default () => {
   return (
     <>
       <ContentHeaderBar className="shortlink-content-header-bar new-shortlink-content-header-bar">
-        <Button type="primary" onClick={handleBack}>Back</Button>
+        <Button shape="circle" onClick={handleBack} icon={<LeftOutlined />} />
         {/* <Button>Delete</Button> */}
         {/* <Button><EllipsisOutlined /></Button> */}
       </ContentHeaderBar>
@@ -84,8 +84,8 @@ export default () => {
               <Input.TextArea rows={10} />
             </Form.Item>
 
-            <Form.Item name="public" valuePropName="checked" wrapperCol={{ sm: { offset: 4, span: 12 }}}>
-              <Checkbox>public</Checkbox>
+            <Form.Item name="active" valuePropName="checked" wrapperCol={{ sm: { offset: 4, span: 12 }}}>
+              <Checkbox>active</Checkbox>
             </Form.Item>
 
             <Form.Item wrapperCol={{ sm: { offset: 4, span: 12 }}}>

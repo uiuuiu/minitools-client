@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Row, Col, Button, Image, Pagination, Input } from "antd";
-import { EllipsisOutlined } from "@ant-design/icons";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Row, Col, Button, Image, Pagination, Input, Popover, Switch } from "antd";
+import { EllipsisOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
@@ -12,49 +12,38 @@ import './List.scss';
 
 const { Search } = Input;
 
-const mockShortLinks = [
-  {
-    id: 1,
-    thumbnail: 'null',
-    title: "Link 1",
-    shorted_url: "https://google.com.vn",
-    description: "Test link"
-  },
-  {
-    id: 2,
-    thumbnail: 'null',
-    title: "Link 1",
-    shorted_url: "https://google.com.vn",
-    description: "Test link"
-  },
-  {
-    id: 3,
-    thumbnail: 'null',
-    title: "Link 1",
-    shorted_url: "https://google.com.vn",
-    description: "Test link"
-  }
-]
-
 export default () => {
   const dispatch = useDispatch();
   const api = apis(dispatch).shortLinkApi;
   const navigation = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dataSearchParams = Object.fromEntries(searchParams);
+  
   const { shortLinks, paginationOpts } = useSelector(state => state.shortLink)
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(dataSearchParams.page || 1);
+  const [limit, setLimit] = useState(dataSearchParams.limit || 10);
+  const [searchString, setSearchString] = useState(dataSearchParams.search);
 
   useEffect(() => {
-    api.getShortLinks({page: page, limit: limit});
-  }, [limit, page])
+    let data = {page: page, limit: limit};
+    if(searchString) data['search'] = searchString;
+
+    api.getShortLinks(data);
+    setSearchParams(data);
+  }, [limit, page, searchString])
 
   const handlePageChange = (page, pageSize) => {
     setPage(page);
+    setLimit(pageSize);
   }
 
   const handleNew = () => {
     navigation("/short_links/new")
+  }
+
+  const onSearch = (value) => {
+    setSearchString(value);
   }
 
   return (
@@ -62,7 +51,7 @@ export default () => {
       <ContentHeaderBar className="shortlink-content-header-bar">
         <Row>
           <Col xs={24} sm={12} className="search-form">
-            <Search placeholder="input search text" size="medium" loading={false} />
+            <Search allowClear onSearch={onSearch} placeholder="input search text" size="medium" loading={false} />
           </Col>
           <Col xs={24} sm={12} className="actions-form">
             <Button type="primary" onClick={handleNew}>New</Button>
@@ -76,7 +65,7 @@ export default () => {
           {
             shortLinks.map( record => <ShortLink key={record.id} record={record} /> )
           }
-          <Pagination defaultCurrent={1} current={page} total={paginationOpts.total} pageSize={paginationOpts.pageSize} onChange={handlePageChange} />
+          <Pagination defaultCurrent={1} current={page} total={paginationOpts.total} pageSize={paginationOpts.pageSize} onChange={handlePageChange} showSizeChanger={true} />
         </div>
       </AppContent>
     </>
@@ -84,10 +73,31 @@ export default () => {
 }
 
 const ShortLink = ({record}) => {
-  const redirectUrl = window.location.protocol + "//" + window.location.host + `/r/${record.url_string}`
+  const [copied, setCopied] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const redirectUrl = window.location.protocol + "//" + window.location.host + `/r/${record.url_string}`;
+
+  const copyToClipBoard = (data) => {
+    navigator.clipboard.writeText(data);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000)
+  }
+
+  const handleMoreButton = (e) => {
+    e.stopPropagation();
+  }
+
+  const hidePopup = (e) => {
+    e.stopPropagation();
+    setPopupVisible(false);
+  }
+
+  const handlePopupVisibleChange = (visible) => {
+    setPopupVisible(visible);
+  }
 
   return (
-    <div className="list-short-link-item">
+    <div className="list-short-link-item" onClick={() => copyToClipBoard(redirectUrl)}>
       <div className="list-short-link-item-thumbnail">
         <Image 
           width={80}
@@ -103,9 +113,43 @@ const ShortLink = ({record}) => {
           <a href={redirectUrl}>{redirectUrl}</a>
           <div>{record.description}</div>
         </div>
+        <div className={ copied ? "url-copied-success showing" : "url-copied-success not-showing" }><span><CheckCircleOutlined /></span><span>Copied</span></div>
         <div className="list-short-link-item-actions">
-          <Button><EllipsisOutlined /></Button>
+          <Popover
+            content={<PopupMoreButton record={record} />}
+            title={<a onClick={(e) => hidePopup(e)}>Close</a>}
+            trigger="click"
+            visible={popupVisible}
+            onVisibleChange={handlePopupVisibleChange}
+            placement="bottomLeft"
+          >
+            <Button onClick={(e) => handleMoreButton(e)} ><EllipsisOutlined /></Button>
+          </Popover>
         </div>
+      </div>
+    </div>
+  )
+}
+
+const PopupMoreButton = ({record}) => {
+  const dispatch = useDispatch();
+  const api = apis(dispatch).shortLinkApi;
+
+  const switchActive = (value) => {
+    api.updateShortLink({
+      id: record.id,
+      data: {
+        title: record.title,
+        description: record.description,
+        active: value
+      }
+    })
+  }
+
+  return (
+    <div onClick={(e) => e.stopPropagation()}>
+      <div>
+        <Switch defaultChecked={record.active} onChange={switchActive}/>
       </div>
     </div>
   )

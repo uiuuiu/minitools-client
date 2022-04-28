@@ -37,6 +37,30 @@ export default ({children}) => {
     if(!token) navigation("/")
   }, [token])
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 576);
+
+  const [windowDimenion, detectHW] = useState({
+    winWidth: window.innerWidth,
+    winHeight: window.innerHeight,
+  })
+
+  const detectSize = () => {
+    detectHW({
+      winWidth: window.innerWidth,
+      winHeight: window.innerHeight,
+    })
+
+    setIsMobile(window.innerWidth < 576)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', detectSize)
+
+    return () => {
+      window.removeEventListener('resize', detectSize)
+    }
+  }, [windowDimenion])
+
   return (
     <Layout style={{width: '100vw', minHeight: '100vh'}} className="page-layout">
       <ToastContainer />
@@ -53,7 +77,7 @@ export default ({children}) => {
       </Header>
       <Content className="main-content">
         <Card className='apps-card'>
-          <Menu onClick={navigateTo} selectedKeys={[selectedMenu]} mode="horizontal">
+          <Menu onClick={navigateTo} selectedKeys={[selectedMenu]} mode={isMobile ? "horizontal" : "vertical"}>
             <Menu.Item key='/short_links'>Shortern url</Menu.Item>
             <Menu.Item key='/'>App 2</Menu.Item>
             <Menu.Item key='/?3'>App 3</Menu.Item>
