@@ -33,6 +33,11 @@
         width: 66px;
         height: 66px;
         margin: 10px;
+
+        @media screen and (max-width: 576px) {
+          width: 33px;
+          height: 33px;
+        }
       }
     }
 
@@ -92,7 +97,10 @@
       border-radius: 0px 10px 10px 0px;
 
       .ant-card-body {
-        padding: 0
+        padding: 0;
+        @media screen and (max-width: 576px) {
+          padding: 0;
+        }
       }
 
       @media screen and (max-width: 576px) {

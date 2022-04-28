@@ -49,10 +49,17 @@ export default function authReducer(state = initialState, action) {
         shortLink: action.data
       }
     case 'shortLink/create':
-      
       return {
         ...state,
         shortLink: action.data
+      }
+
+    case 'shortLink/active':
+      const newShortLinks = state.shortLinks.map( sl => sl.id === action.data.id ? action.data : sl )
+
+      return {
+        ...state,
+        shortLinks: newShortLinks
       }
 
     default:

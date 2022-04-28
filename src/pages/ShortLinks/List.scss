@@ -50,13 +50,43 @@
       justify-content: space-between;
       align-items: center;
 
+      @media screen and (max-width: 576px) {
+        overflow: scroll;
+      }
+
       .list-short-link-item-actions {
         margin-right: 30px;
 
         button {
           border-radius: 10px;
         }
+
+        @media screen and (max-width: 576px) {
+          margin-right: 0px;
+        }
       }
+      
     }
   }
+}
+
+.url-copied-success {
+  color: green;
+  font-size: large;
+  
+  span:last-child {
+    margin-left: 5px;
+  }
+}
+
+.not-showing {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 1s, opacity 0.5s linear;
+}
+.showing {
+  visibility: visible;
+  transition: visibility 1s, opacity 0.5s linear;
+  opacity: 1;
+
 }
