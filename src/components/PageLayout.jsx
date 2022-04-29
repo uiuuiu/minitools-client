@@ -15,7 +15,7 @@ const { Header, Content, Footer } = Layout;
 export default ({children}) => {
   const dispatch = useDispatch();
   const api = apis(dispatch).authApi;
-  const [selectedMenu, setSelectedMenu] = useState('/short_links')
+  const [selectedMenu, setSelectedMenu] = useState('')
   const { token } = useSelector(state => state.auth)
 
   const navigation = useNavigate();
@@ -29,8 +29,8 @@ export default ({children}) => {
   }
 
   const navigateTo = ({key}) => {
-    navigation(key);
     setSelectedMenu(key);
+    navigation(key);
   }
 
   useEffect(() => {
@@ -97,11 +97,11 @@ export default ({children}) => {
 export const AuthButton = ({token, logout, toLogin, ...props}) => {
   if(token) {
     return (
-      <Button shape="round" size="large" ghost className="auth-button logout-button" onClick={logout} {...props}>Log out</Button>
+      <Button shape="round" size="large" className="auth-button logout-button" onClick={logout} {...props}>Log out</Button>
     )
   }
 
   return (
-    <Button shape="round" size="large" ghost className="auth-button login-button" onClick={toLogin} {...props}>Log in</Button>
+    <Button shape="round" size="large" className="auth-button login-button" onClick={toLogin} {...props}>Log in</Button>
   )
 }

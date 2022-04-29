@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Row, Col, Button, Image, Pagination, Input, Popover, Switch } from "antd";
-import { EllipsisOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { EllipsisOutlined, CheckCircleOutlined, PlusCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
@@ -34,6 +34,8 @@ export default () => {
   }, [limit, page, searchString])
 
   const handlePageChange = (page, pageSize) => {
+    localStorage.setItem('page', page);
+    localStorage.setItem('limit', pageSize);
     setPage(page);
     setLimit(pageSize);
   }
@@ -54,9 +56,11 @@ export default () => {
             <Search allowClear onSearch={onSearch} placeholder="input search text" size="medium" loading={false} />
           </Col>
           <Col xs={24} sm={12} className="actions-form">
-            <Button type="primary" onClick={handleNew}>New</Button>
-            <Button>Delete</Button>
-            <Button><EllipsisOutlined /></Button>
+            <div>
+              <Button type="link" onClick={handleNew} icon={<PlusCircleTwoTone style={{ fontSize: '25px'}} />} />
+              <Button type="link" icon={<DeleteTwoTone style={{ fontSize: '25px'}}  />} />
+              <Button shape="circle" icon={<EllipsisOutlined style={{ fontSize: '25px'}} />} />
+            </div>
           </Col>
         </Row>
       </ContentHeaderBar>

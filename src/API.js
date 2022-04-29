@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify';
+import config from './config';
 class API {  
   constructor(dispatch) {
+    this.apiEndpoint = config.apiEndpoint;
     this.dispatch = dispatch;
     this.requestOpts = {
       headers: {
@@ -69,7 +71,7 @@ class API {
 
   callApi(url, method, options, cb) {
     fetch(
-      url,
+      `${this.apiEndpoint}/${url}`,
       { method: method, ...options }
     ).then( response => {
         response.json().then(body => {
@@ -84,7 +86,7 @@ class API {
 
   callAuthApi(url, method, options, cb) {
     fetch(
-      url,
+      `${this.apiEndpoint}/${url}`,
       { method: method, ...options }
     ).then( response => {
         response.json().then(body => {
@@ -99,7 +101,7 @@ class API {
 
   callLoginApi(url, method, options, cb) {
     fetch(
-      url,
+      `${this.apiEndpoint}/${url}`,
       { method: method, ...options }
     ).then( response => {
         response.json().then(body => {
