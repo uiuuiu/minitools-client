@@ -3,7 +3,20 @@ import API from "../API";
 class authApi extends API {
   login({email, password, extraOpts={}}) {
     const body = { user: { email: email, password: password }};
-    const url = 'http://localhost:3000/sign_in';
+    const url = 'sign_in';
+
+    this.callLoginApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts, ...extraOpts }, (body) => {
+      if (body.meta.status == 200) {
+        this.dispatch({ type: 'auth/login', data: body["data"] })
+      } else {
+        this.notify(body.meta.message)
+      }
+    })
+  }
+
+  googleLogin(data, extraOpts={}) {
+    const body = data;
+    const url = 'api/v1/social_auth/callback';
 
     this.callLoginApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts, ...extraOpts }, (body) => {
       if (body.meta.status == 200) {
@@ -15,7 +28,7 @@ class authApi extends API {
   }
 
   logout() {
-    const url = 'http://localhost:3000/sign_out';
+    const url = 'sign_out';
     this.callLoginApi(url, 'DELETE', {}, (body) => {
       if (body.meta.status == 200) {
         this.dispatch({ type: 'auth/logout' })

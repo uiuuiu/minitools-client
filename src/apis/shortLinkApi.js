@@ -8,7 +8,7 @@ class shortLinkApi extends API {
     if (search) {
       query['search'] = search
     }
-    const url = queryString.stringifyUrl({url: 'http://localhost:3000/api/v1/shorted_links', query: query});
+    const url = queryString.stringifyUrl({url: 'api/v1/shorted_links', query: query});
 
     this.callAuthApi(url, 'GET', {...this.authRequestOpts, ...extraOpts}, (body) => {
       if (body.meta.status == 200) {
@@ -20,7 +20,7 @@ class shortLinkApi extends API {
   }
 
   getRedirectLink(urlKey) {
-    const url = queryString.stringifyUrl({url: `http://localhost:3000/r/${urlKey}`});
+    const url = queryString.stringifyUrl({url: `r/${urlKey}`});
     this.callAuthApi(url, 'GET', {...this.authRequestOpts}, (body) => {
       if (body.meta.status == 200) {
         this.dispatch({ type: 'shortLink/redirect', data: body["data"]})
@@ -32,7 +32,7 @@ class shortLinkApi extends API {
 
   createShortLink({data, extraOpts={}}) {
     const body = data;
-    const url = 'http://localhost:3000/api/v1/shorted_links';
+    const url = 'api/v1/shorted_links';
 
     this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body) => {
       if (body.meta.status == 200) {
@@ -46,7 +46,7 @@ class shortLinkApi extends API {
 
   updateShortLink({id, data, extraOpts={}}) {
     const body = data;
-    const url = `http://localhost:3000/api/v1/shorted_links/${id}`;
+    const url = `api/v1/shorted_links/${id}`;
 
     this.callAuthApi(url, 'PUT', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body) => {
       if (body.meta.status == 200) {

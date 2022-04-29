@@ -1,5 +1,9 @@
 .new-shortlink-content-header-bar {
   height: 50px;
+  justify-content: flex-end;
+  button {
+    font-weight: 600;
+  }
 }
 
 .new-container {

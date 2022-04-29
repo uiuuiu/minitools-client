@@ -20,7 +20,7 @@ export default ({token, logout, toLogin}) => {
         <div className="rightMenu">
           {/* <RightMenu /> */}
         </div>
-        <Button onClick={() => setVisible(true)}>
+        <Button className="header-menu-expand" onClick={() => setVisible(true)}>
           <MenuOutlined />
         </Button>
         <Drawer

@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Checkbox, Button } from "antd";
-import { EllipsisOutlined, LeftOutlined } from "@ant-design/icons";
+// import { PlusCircleOutlined } from "@ant-design/icons";
 
 // import { useForm } from "react-hook-form";
 import apis from "../../apis";
@@ -32,7 +32,7 @@ export default () => {
   return (
     <>
       <ContentHeaderBar className="shortlink-content-header-bar new-shortlink-content-header-bar">
-        <Button shape="circle" onClick={handleBack} icon={<LeftOutlined />} />
+        <Button shape="round" onClick={handleBack}>Back</Button>
         {/* <Button>Delete</Button> */}
         {/* <Button><EllipsisOutlined /></Button> */}
       </ContentHeaderBar>
