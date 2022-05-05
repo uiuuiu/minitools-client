@@ -59,7 +59,7 @@ export default () => {
             <div>
               <Button type="link" onClick={handleNew} icon={<PlusCircleTwoTone style={{ fontSize: '25px'}} />} />
               <Button type="link" icon={<DeleteTwoTone style={{ fontSize: '25px'}}  />} />
-              <Button shape="circle" icon={<EllipsisOutlined style={{ fontSize: '25px'}} />} />
+              {/* <Button shape="circle" icon={<EllipsisOutlined style={{ fontSize: '25px'}} />} /> */}
             </div>
           </Col>
         </Row>

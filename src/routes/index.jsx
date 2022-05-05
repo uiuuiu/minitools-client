@@ -7,12 +7,17 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import ShortLinks from "../pages/ShortLinks";
 import NewShortLink from "../pages/ShortLinks/New";
+import PublicNewShortLink from "../pages/PublicShortLink/New";
 import { createBrowserHistory } from "history";
 const history = createBrowserHistory({ window })
 
-const PrivateRoute = ({element}) => {
+const PrivateRoute = ({element, public_element}) => {
   const token = localStorage.getItem('token');
-  return token ? <PageLayout>{element}</PageLayout> : <Navigate to="/sign_in" />
+  if(token) {
+    return <PageLayout>{element}</PageLayout>;
+  }
+  console.log('token', token)
+  return public_element ? <PageLayout>{public_element}</PageLayout> : <Navigate to="/sign_in" />;
 }
 
 const PublicRoute = ({element}) => {
@@ -27,7 +32,7 @@ export default (
       <Route path="/sign_up" exact element={<Signup />} />
       <Route path="/r/:token" element={<RedirectShortLink />} />
 
-      <Route path="/short_links" element={<PrivateRoute element={<ShortLinks />}/>} />
+      <Route path="/short_links" element={<PrivateRoute element={<ShortLinks />} public_element={<PublicNewShortLink />} />} />
       <Route path="/short_links/new" element={<PrivateRoute element={<NewShortLink />}/>} />
       <Route path="*" element={<Navigate to="/" />} />
       {/* <Route path="/login" exact element={<Login />} />

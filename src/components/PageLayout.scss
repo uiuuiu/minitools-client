@@ -47,6 +47,10 @@
       padding-right: 20px;
       display: flex;
 
+      button {
+        margin-left: 15px;
+      }
+
       @media screen and (max-width: 576px) {
         display: none;
       }
@@ -57,7 +61,7 @@
       }
 
       .logout-button {
-        background-color: #208838;
+        background-color: #61b0f3;
       }
 
       .login-button {
@@ -84,6 +88,12 @@
       }
 
       .ant-card-body {
+        .ant-menu-title-content {
+          color: #61B0F2;
+          font-size: larger;
+          font-weight: 400;
+        }
+
         @media screen and (max-width: 576px) {
           padding: 5px 24px;
         }
