@@ -1,22 +1,25 @@
+import { AnyAction } from 'redux';
+import { actions } from '../apis/authApi';
+
 const initialState = {
   token: localStorage.getItem('token'),
   loginSuccess: false
 }
 
 // Use the initialState as a default value
-export default function authReducer(state = initialState, action) {
+export default function authReducer(state = initialState, action: AnyAction) {
   // The reducer normally looks at the action type field to decide what happens
   switch (action.type) {
     // Do something here based on the different types of actions
 
-    case 'auth/login':
+    case actions.AUTH_LOGIN:
       localStorage.setItem('token', action.data.token);
       return {
         ...state,
         token: action.data.token,
         loginSuccess: true
       }
-    case 'auth/logout':
+    case actions.AUTH_LOGOUT:
       localStorage.removeItem('token');
       return {
         ...state,

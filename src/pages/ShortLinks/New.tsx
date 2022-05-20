@@ -6,12 +6,14 @@ import { Form, Input, Checkbox, Button } from "antd";
 
 // import { useForm } from "react-hook-form";
 import apis from "../../apis";
-
+// import { formData } from "./types";
+import { ShortLinkFormData } from "../../types/data/ShortLinkData";
 
 import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
 import './New.scss';
+import { ValidateErrorEntity } from "rc-field-form/lib/interface";
 
 export default () => {
   const navigation = useNavigate();
@@ -20,10 +22,10 @@ export default () => {
 
   // const { register, handleSubmit, watch, formState: { errors } } = useForm();
   // const onSubmit = data => console.log(data);
-  const onFinish = (data) => {
-    api.createShortLink({data: data});
+  const onFinish = (data: ShortLinkFormData) => {
+    api.createShortLink({ data });
   };
-  const onFinishFailed = data =>console.log(data);
+  const onFinishFailed = (errorInfo: ValidateErrorEntity<ShortLinkFormData>) => console.log(errorInfo);
 
   const handleBack = () => {
     navigation(-1)
@@ -50,7 +52,7 @@ export default () => {
             <Form.Item
               label="Url"
               name="url"
-              type="url"
+              // type="url"
               rules={[
                 { required: true, message: 'Please input url for shorten' },
                 () => ({
@@ -71,7 +73,7 @@ export default () => {
             <Form.Item
               label="Title"
               name="title"
-              // rules={[{ required: true, message: 'Please input your password!' }]}
+            // rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input />
             </Form.Item>
@@ -79,16 +81,16 @@ export default () => {
             <Form.Item
               label="Description"
               name="description"
-              // rules={[{ required: true, message: 'Please input your password!' }]}
+            // rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.TextArea rows={10} />
             </Form.Item>
 
-            <Form.Item name="active" valuePropName="checked" wrapperCol={{ sm: { offset: 4, span: 12 }}}>
+            <Form.Item name="active" valuePropName="checked" wrapperCol={{ sm: { offset: 4, span: 12 } }}>
               <Checkbox>active</Checkbox>
             </Form.Item>
 
-            <Form.Item wrapperCol={{ sm: { offset: 4, span: 12 }}}>
+            <Form.Item wrapperCol={{ sm: { offset: 4, span: 12 } }}>
               <Button type="primary" htmlType="submit">
                 Create
               </Button>

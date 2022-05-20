@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Form, Input, Checkbox, Button } from "antd";
+import { Form, Input, Button } from "antd";
+import { CopyOutlined } from "@ant-design/icons";
 import apis from "../../apis";
 
 
@@ -8,22 +9,35 @@ import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
 import './New.scss';
+import { ShortLinkData, ShortLinkFormData } from "../../types/data/ShortLinkData";
 
 export default () => {
   const dispatch = useDispatch();
   const api = apis(dispatch).shortLinkApi;
+  const [createdUrl, setCreatedUrl] = useState<ShortLinkData | undefined>();
+  const [showShortedField, setShowShortedField] = useState(false);
 
-  // const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  // const onSubmit = data => console.log(data);
-  const onFinish = (data) => {
-    api.createShortLink({data: data});
+  const onFinish = (data: ShortLinkFormData) => {
+    api.createPublicShortLink({
+      data: data,
+      cb: (cbData: ShortLinkData) => setCreatedUrl(cbData)
+    });
   };
-  const onFinishFailed = data =>console.log(data);
+  const onFinishFailed = (data: any) => console.log(data);
+
+  useEffect(() => {
+    if (createdUrl) setShowShortedField(true);
+  }, [createdUrl])
+
+  const getRedirectUrl = (record: ShortLinkData | undefined) => {
+    if (!record) return
+    return window.location.protocol + "//" + window.location.host + `/r/${record.url_string}`;
+  }
 
   return (
     <>
       <ContentHeaderBar className="shortlink-content-header-bar new-public-shortlink-content-header-bar">
-        Easy to shorten your url
+        <span>Easy to shorten your url</span>
       </ContentHeaderBar>
       <AppContent>
         <div className="new-public-container">
@@ -36,10 +50,20 @@ export default () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
+            {
+              showShortedField &&
+              <Form.Item
+                label={<span style={{ fontWeight: 'bold', color: 'green' }}>Shorterned url</span>}
+              >
+                <Input.Group compact>
+                  <Input style={{ width: 'calc(100% - 100px)' }} disabled value={getRedirectUrl(createdUrl)} />
+                  <Button onClick={() => navigator.clipboard.writeText(getRedirectUrl(createdUrl) || "")} icon={<CopyOutlined />} />
+                </Input.Group>
+              </Form.Item>
+            }
             <Form.Item
               label="Url"
               name="url"
-              type="url"
               rules={[
                 { required: true, message: 'Please input url for shorten' },
                 () => ({
@@ -60,7 +84,7 @@ export default () => {
             <Form.Item
               label="Title"
               name="title"
-              // rules={[{ required: true, message: 'Please input your password!' }]}
+            // rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input />
             </Form.Item>
@@ -68,16 +92,12 @@ export default () => {
             <Form.Item
               label="Description"
               name="description"
-              // rules={[{ required: true, message: 'Please input your password!' }]}
+            // rules={[{ required: true, message: 'Please input your password!' }]}
             >
               <Input.TextArea rows={10} />
             </Form.Item>
 
-            <Form.Item name="active" valuePropName="checked" wrapperCol={{ sm: { offset: 4, span: 12 }}}>
-              <Checkbox>active</Checkbox>
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ sm: { offset: 4, span: 12 }}}>
+            <Form.Item wrapperCol={{ sm: { offset: 4, span: 12 } }}>
               <Button type="primary" htmlType="submit">
                 Create
               </Button>

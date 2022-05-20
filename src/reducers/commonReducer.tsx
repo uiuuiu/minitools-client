@@ -1,9 +1,11 @@
+import { AnyAction } from 'redux';
+
 const initialState = {
   selectedApp: '/short_links'
 }
 
 // Use the initialState as a default value
-export default function commonReducer(state = initialState, action) {
+export default function commonReducer(state = initialState, action: AnyAction) {
   // The reducer normally looks at the action type field to decide what happens
   switch (action.type) {
     // Do something here based on the different types of actions

@@ -1,3 +1,29 @@
+import { AnyAction } from 'redux';
+import { actions } from '../apis/shortLinkApi';
+
+interface shortLinkData {
+  id: number;
+  url: string;
+  title: string;
+  url_string: string;
+  description: string;
+  tag: string;
+  active: boolean;
+}
+
+interface shortLinkInitialState {
+  shortLinks: shortLinkData[];
+  shortLink?: shortLinkData,
+  redirectLoading: boolean,
+  paginationOpts: {
+    current?: number,
+    pageSize: number | null,
+    pageSizeOptions?: string[],
+    total?: number
+  },
+  query: any
+}
+
 const initialState = {
   shortLinks: [],
   shortLink: null,
@@ -12,7 +38,7 @@ const initialState = {
 }
 
 // Use the initialState as a default value
-export default function authReducer(state = initialState, action) {
+export default function authReducer(state = initialState, action: AnyAction) {
   // The reducer normally looks at the action type field to decide what happens
   switch (action.type) {
     // Do something here based on the different types of actions
@@ -22,14 +48,14 @@ export default function authReducer(state = initialState, action) {
         redirectLoading: action.data
       }
 
-    case 'shortLink/list':
+    case actions.SHORTLINK_LIST:
       let paginationOpts = { ...state.paginationOpts }
       if (action.meta) {
         paginationOpts = {
           ...paginationOpts,
           current: action.meta["current_page"],
           total: action.meta["total_count"],
-          pageSize: parseInt(localStorage.getItem('limit')) || paginationOpts.pageSize
+          pageSize: parseInt(localStorage.getItem('limit') || '') || paginationOpts.pageSize
         }
       } else {
         paginationOpts = {
@@ -43,19 +69,19 @@ export default function authReducer(state = initialState, action) {
         paginationOpts: paginationOpts,
         shortLinks: action.data
       }
-    case 'shortLink/redirect':
+    case actions.SHORTLINK_REDIRECT:
       return {
         ...state,
         shortLink: action.data
       }
-    case 'shortLink/create':
+    case actions.SHORTLINK_CREATE:
       return {
         ...state,
         shortLink: action.data
       }
 
-    case 'shortLink/active':
-      const newShortLinks = state.shortLinks.map( sl => sl.id === action.data.id ? action.data : sl )
+    case actions.SHORTLINK_ACTIVE:
+      const newShortLinks = state.shortLinks.map((sl: shortLinkData) => sl.id === action.data.id ? action.data : sl)
 
       return {
         ...state,
