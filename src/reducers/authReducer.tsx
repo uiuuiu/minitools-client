@@ -3,7 +3,8 @@ import { actions } from '../apis/authApi';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  loginSuccess: false
+  loginSuccess: false,
+  signupSuccess: false,
 }
 
 // Use the initialState as a default value
@@ -25,6 +26,11 @@ export default function authReducer(state = initialState, action: AnyAction) {
         ...state,
         loginSuccess: false,
         token: null
+      }
+    case actions.AUTH_SIGNUP:
+      return {
+        ...state,
+        signupSuccess: true
       }
     default:
       // If this reducer doesn't recognize the action type, or doesn't

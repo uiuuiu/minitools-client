@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Checkbox, Row } from 'antd';
 import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from "react-google-login";
@@ -13,7 +13,7 @@ import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
 export default () => {
   const dispatch = useDispatch();
-  const api = apis(dispatch).authApi
+  const api = apis(dispatch).authApi;
 
   const token = localStorage.getItem('token');
   const { loginSuccess } = useSelector((state: RootState) => state.auth)
@@ -91,6 +91,9 @@ export default () => {
             <Button type="primary" htmlType="submit">
               Sign in
             </Button>
+          </Form.Item>
+          <Form.Item>
+            <span>Don't have an account? </span><Link to="/sign_up">Sign up</Link>
           </Form.Item>
         </Form>
         <Row>

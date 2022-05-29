@@ -11,18 +11,18 @@ interface shortLinkData {
   active: boolean;
 }
 
-interface shortLinkInitialState {
-  shortLinks: shortLinkData[];
-  shortLink?: shortLinkData,
-  redirectLoading: boolean,
-  paginationOpts: {
-    current?: number,
-    pageSize: number | null,
-    pageSizeOptions?: string[],
-    total?: number
-  },
-  query: any
-}
+// interface shortLinkInitialState {
+//   shortLinks: shortLinkData[];
+//   shortLink?: shortLinkData,
+//   redirectLoading: boolean,
+//   paginationOpts: {
+//     current?: number,
+//     pageSize: number | null,
+//     pageSizeOptions?: string[],
+//     total?: number
+//   },
+//   query: any
+// }
 
 const initialState = {
   shortLinks: [],
@@ -79,7 +79,14 @@ export default function authReducer(state = initialState, action: AnyAction) {
         ...state,
         shortLink: action.data
       }
-
+    case actions.PUBLIC_SHORTLINK_CREATE:
+      let localShortLinks = JSON.parse(localStorage.getItem("localShortLinks") || JSON.stringify([]));
+      localShortLinks.push(action.data);
+      localStorage.setItem("localShortLinks", JSON.stringify(localShortLinks));
+      return {
+        ...state,
+        shortLink: action.data
+      }
     case actions.SHORTLINK_ACTIVE:
       const newShortLinks = state.shortLinks.map((sl: shortLinkData) => sl.id === action.data.id ? action.data : sl)
 
@@ -87,7 +94,9 @@ export default function authReducer(state = initialState, action: AnyAction) {
         ...state,
         shortLinks: newShortLinks
       }
-
+    case actions.SHORTLINK_SYNC:
+      localStorage.removeItem("localShortedLinks");
+      return state
     default:
       // If this reducer doesn't recognize the action type, or doesn't
       // care about this specific action, return the existing state unchanged

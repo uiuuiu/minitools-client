@@ -1,7 +1,7 @@
-import React, { useState, useEffect, MouseEventHandler, HTMLAttributes } from "react";
+import React, { useState, useEffect, MouseEventHandler, Dispatch, SetStateAction } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout, Button, Row, Col, Card, Menu } from "antd";
+import { Layout, Button, Row, Col, Card, Menu, Popover } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +9,7 @@ import Navbar from "./Navbar";
 import "./PageLayout.scss";
 
 import apis from "../apis";
+import actions from "../actions";
 import { RootState } from "../store";
 import { BaseButtonProps } from "antd/lib/button/button";
 
@@ -26,11 +27,11 @@ const menuItems = [
   { key: "/?5", label: 'App 5' },
 ]
 
-export default ({ children }: PageLayoutProps) => {
+const PageLayout = ({ children }: PageLayoutProps) => {
   const dispatch = useDispatch();
   const api = apis(dispatch).authApi;
-  // const [selectedMenu, setSelectedMenu] = useState('')
-  const { selectedApp } = useSelector((state: RootState) => state.common);
+  const action = actions(dispatch).commonActions;
+  const { selectedApp } = useSelector((state: RootState) => state.actions.common);
   const { token } = useSelector((state: RootState) => state.auth)
 
   const navigation = useNavigate();
@@ -44,13 +45,11 @@ export default ({ children }: PageLayoutProps) => {
   }
 
   const navigateTo = ({ key }: { key: string }) => {
-    dispatch({ type: 'apps/selected', data: key })
+    action.selectApp(key)
     navigation(key);
   }
 
-  // useEffect(() => {
-  //   if(!token) navigation("/")
-  // }, [token])
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 576);
 
@@ -82,11 +81,11 @@ export default ({ children }: PageLayoutProps) => {
       <Header>
         <Row>
           <Col xs={24} sm={6} className="logo-col">
-            <Link to="/"><img src="/logo.png" className="logo" /></Link>
+            <Link to="/"><img src="/logo.png" className="logo" alt="logo" /></Link>
             <Navbar token={token} logout={logout} toLogin={toLogin} />
           </Col>
           <Col xs={24} sm={18} className="header-right">
-            {token && <Button type="link" icon={<UserOutlined style={{ fontSize: '25px' }} />} />}
+            <AvatarButton token={token} popupVisible={popupVisible} setPopupVisible={setPopupVisible} />
             <AuthButton token={token} logout={logout} toLogin={toLogin} />
           </Col>
         </Row>
@@ -113,16 +112,39 @@ interface AuthButtonProps extends BaseButtonProps {
   token: string
   logout: MouseEventHandler<HTMLElement>
   toLogin: MouseEventHandler<HTMLElement>
+  style?: {}
 }
 
-export const AuthButton = ({ token, logout, toLogin, ...props }: AuthButtonProps) => {
+export const AuthButton = ({ token, logout, toLogin, style, ...props }: AuthButtonProps) => {
   if (token) {
     return (
-      <Button shape="round" size="large" className="auth-button logout-button" onClick={logout} {...props}>Log out</Button>
+      <Button shape="round" size="large" className="auth-button logout-button" onClick={logout} style={style} {...props}>Log out</Button>
     )
   }
 
   return (
-    <Button shape="round" size="large" className="auth-button login-button" onClick={toLogin} {...props}>Log in</Button>
+    <Button shape="round" size="large" className="auth-button login-button" onClick={toLogin} style={style} {...props}>Log in</Button>
   )
 }
+
+export const AvatarButton = ({ token, popupVisible, setPopupVisible }: { token: string, popupVisible: boolean, setPopupVisible: Dispatch<SetStateAction<boolean>> } & BaseButtonProps) => {
+  if (!token) return <></>;
+
+  const handlePopupVisibleChange = (visible: boolean) => {
+    setPopupVisible(visible);
+  }
+
+  return (
+    <Popover
+      content={"Hello"}
+      trigger="click"
+      visible={popupVisible}
+      onVisibleChange={handlePopupVisibleChange}
+      placement="bottom"
+    >
+      <Button type="link" icon={<UserOutlined style={{ fontSize: '25px' }} />} />
+    </Popover>
+  )
+}
+
+export default PageLayout;

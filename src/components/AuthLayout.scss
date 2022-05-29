@@ -1,7 +1,22 @@
-.auth-layout{
+.auth-layout {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background: #EFF2F5;
+
+  .auth-form {
+    padding: 10px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 0px 1px #eff2f5;
+
+    .ant-form-item {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
 }

@@ -8,7 +8,9 @@ export const actions = {
   SHORTLINK_LIST: 'shortLink/list',
   SHORTLINK_REDIRECT: 'shortLink/redirect',
   SHORTLINK_CREATE: 'shortLink/create',
+  PUBLIC_SHORTLINK_CREATE: 'shortLink/publicCreate',
   SHORTLINK_ACTIVE: 'shortLink/active',
+  SHORTLINK_SYNC: 'shortLink/sync',
 }
 
 class shortLinkApi extends API {
@@ -54,13 +56,27 @@ class shortLinkApi extends API {
     })
   }
 
+  syncShortLinks({ data, extraOpts = {} }: { data: ShortLinkFormData[], extraOpts?: {} }) {
+    const body = { shorted_links: data };
+    const url = 'api/v1/sync_local_shorted_links';
+
+    this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
+      if (body.meta.status == 200) {
+        this.dispatch({ type: actions.SHORTLINK_SYNC, data: body.data })
+        this.notify("All local links were synced")
+      } else {
+        this.notify((body.meta.message as Array<string>).join("\n"))
+      }
+    })
+  }
+
   createPublicShortLink({ data, extraOpts = {}, cb }: { data: ShortLinkFormData, extraOpts?: {}, cb: (data: ShortLinkData) => void }) {
     const body = data;
     const url = 'api/v1/public_shorted_links';
 
     this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
       if (body.meta.status == 200) {
-        this.dispatch({ type: actions.SHORTLINK_CREATE, data: body.data })
+        this.dispatch({ type: actions.PUBLIC_SHORTLINK_CREATE, data: body.data })
         this.notify("Url was shortern")
         if (cb) cb(body.data);
       } else {

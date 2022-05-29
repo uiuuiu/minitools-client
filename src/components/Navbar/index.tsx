@@ -40,8 +40,8 @@ export default ({ token, logout, toLogin }: NavbarProps) => {
           <NavbarItem>Profile</NavbarItem>
           <NavbarItem>Settings</NavbarItem>
           <NavbarItem>
-            <LogoutOutlined />
-            <AuthButton token={token} logout={logout} toLogin={toLogin} type="text" />
+            <AuthButton style={{ padding: 0 }} token={token} logout={logout} toLogin={toLogin} type="text" icon={<LogoutOutlined />} />
+            {/* <LogoutOutlined /> */}
           </NavbarItem>
         </Drawer>
       </div>

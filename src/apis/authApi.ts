@@ -4,7 +4,8 @@ import { UserData, GoogleUserData } from "../types/data/UserData";
 
 export const actions = {
   AUTH_LOGIN: 'auth/login',
-  AUTH_LOGOUT: 'auth/logout'
+  AUTH_LOGOUT: 'auth/logout',
+  AUTH_SIGNUP: 'auth/signup',
 }
 
 class authApi extends API {
@@ -28,6 +29,20 @@ class authApi extends API {
     this.callLoginApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts, ...extraOpts }, (body: apiResponse<any>) => {
       if (body.meta.status == 200) {
         this.dispatch({ type: actions.AUTH_LOGIN, data: body["data"] })
+      } else {
+        this.notify(body.meta.message)
+      }
+    })
+  }
+
+  signUp({ email, password, passwordConfirmation }: UserData & { passwordConfirmation: string }) {
+    const body = { user: { email: email, password: password, password_confirmation: passwordConfirmation } };
+    const url = 'sign_up';
+
+    this.callApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts }, (body: apiResponse<any>) => {
+      if (body.meta.status == 200) {
+        this.dispatch({ type: actions.AUTH_SIGNUP, data: body["data"] })
+        this.notify("Please check your registed email for verification")
       } else {
         this.notify(body.meta.message)
       }

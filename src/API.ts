@@ -50,6 +50,7 @@ class API {
 
   handleLoginResponse(headers: Headers, body: apiResponse<any>, cb: ({ data: { }, meta: { } }: apiResponse<any>) => void) {
     try {
+      console.log('body', body)
       if (body.meta.error) {
         throw body.meta.error
       } else {
@@ -75,7 +76,11 @@ class API {
 
     if (cb) opts['onClose'] = cb
 
-    toast(message, opts);
+    if (message instanceof Array) {
+      toast(message.join("/n"), opts);
+    } else {
+      toast(message, opts);
+    }
   }
 
   callApi(url: string, method: string, options: {}, cb?: (data: apiResponse<any>) => void) {

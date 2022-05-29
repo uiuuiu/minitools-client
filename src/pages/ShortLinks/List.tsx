@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Row, Col, Button, Image, Pagination, Input, Popover, Switch } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import { EllipsisOutlined, CheckCircleOutlined, PlusCircleTwoTone, DeleteTwoTone } from "@ant-design/icons";
+import { EllipsisOutlined, CheckCircleOutlined, PlusCircleTwoTone, DeleteTwoTone, CloudSyncOutlined, MoreOutlined } from "@ant-design/icons";
 import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
@@ -53,6 +53,10 @@ export default () => {
     navigation("/short_links/new")
   }
 
+  const handleSync = () => {
+
+  }
+
   const onSearch = (value: string) => {
     setSearchString(value);
   }
@@ -69,6 +73,7 @@ export default () => {
               <Button type="link" onClick={handleNew} icon={<PlusCircleTwoTone style={{ fontSize: '25px' }} />} />
               <Button type="link" icon={<DeleteTwoTone style={{ fontSize: '25px' }} />} />
               {/* <Button shape="circle" icon={<EllipsisOutlined style={{ fontSize: '25px'}} />} /> */}
+              <SyncLinksButton handleSync={handleSync} />
             </div>
           </Col>
         </Row>
@@ -82,6 +87,15 @@ export default () => {
         </div>
       </AppContent>
     </>
+  )
+}
+
+const SyncLinksButton = ({ handleSync }: { handleSync: () => void }) => {
+  const localLinks = JSON.parse(localStorage.getItem('localShortLinks') || JSON.stringify([]));
+  if (localLinks.length == 0) return <></>
+
+  return (
+    <Button type="link" onClick={handleSync} icon={<CloudSyncOutlined style={{ fontSize: '25px' }} title="There are some shortened links can sync to your account" />} />
   )
 }
 
@@ -121,8 +135,8 @@ const ShortLink = ({ record }: { record: ShortLinkData }) => {
       </div>
       <div className="list-short-link-item-body">
         <div className="list-short-link-item-content">
-          <div>{record.title || 'Untitled'}</div>
-          <div>origin: {record.url}</div>
+          <div className="list-short-link-item-content-title">{record.title || 'Untitled'}</div>
+          <div className="list-short-link-item-content-url">origin: {record.url}</div>
           <a href={redirectUrl}>{redirectUrl}</a>
           <div>{record.description}</div>
         </div>
@@ -136,7 +150,7 @@ const ShortLink = ({ record }: { record: ShortLinkData }) => {
             onVisibleChange={handlePopupVisibleChange}
             placement="bottomLeft"
           >
-            <Button onClick={(e) => handleMoreButton(e)} ><EllipsisOutlined /></Button>
+            <Button type="link" onClick={(e) => handleMoreButton(e)} ><MoreOutlined style={{ fontSize: '16px' }} /></Button>
           </Popover>
         </div>
       </div>
