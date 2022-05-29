@@ -1,10 +1,14 @@
 import React from "react";
 import './NavbarItem.scss';
 
-export default ({children}) => {
+type NavbarItemProps = {
+  children: React.ReactNode
+}
+
+export default ({ children }: NavbarItemProps) => {
   return (
     <div className='navbar-item'>
       {children}
     </div>
   )
-}
+};

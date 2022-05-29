@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 // import LeftMenu from "./left";
 // import RightMenu from "./right";
 import { Drawer, Button } from "antd";
@@ -8,9 +8,15 @@ import NavbarItem from "./NavbarItem";
 import { AuthButton } from "../PageLayout";
 import './Navbar.scss';
 
-export default ({token, logout, toLogin}) => {
+type NavbarProps = {
+  token: string
+  logout: MouseEventHandler<HTMLElement>
+  toLogin: MouseEventHandler<HTMLElement>
+}
+
+export default ({ token, logout, toLogin }: NavbarProps) => {
   const [visible, setVisible] = useState(false);
-  
+
   return (
     <nav className="menuBar">
       <div className="menuCon">
@@ -34,8 +40,8 @@ export default ({token, logout, toLogin}) => {
           <NavbarItem>Profile</NavbarItem>
           <NavbarItem>Settings</NavbarItem>
           <NavbarItem>
-            <LogoutOutlined />
-            <AuthButton token={token} logout={logout} toLogin={toLogin} type="text" />
+            <AuthButton style={{ padding: 0 }} token={token} logout={logout} toLogin={toLogin} type="text" icon={<LogoutOutlined />} />
+            {/* <LogoutOutlined /> */}
           </NavbarItem>
         </Drawer>
       </div>

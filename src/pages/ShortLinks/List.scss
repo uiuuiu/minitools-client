@@ -13,10 +13,10 @@
     @media screen and (max-width: 576px) {
       justify-content: flex-end;
       margin-top: 5px;
-      button {
-        margin-left: 0px !important;
-        margin-right: 5px !important;
-      }
+      // button {
+      //   // margin-left: 0px !important;
+      //   // margin-right: 5px !important;
+      // }
     }
 
     button {
@@ -38,6 +38,8 @@
     box-shadow: -0.5px 0px #edeaea;
 
     .list-short-link-item-thumbnail {
+      margin: 5px;
+
       @media screen and (max-width: 576px) {
         display: none;
       }
@@ -49,23 +51,52 @@
       width: 100%;
       justify-content: space-between;
       align-items: center;
+      position: relative;
 
       @media screen and (max-width: 576px) {
-        overflow: scroll;
+        // overflow: scroll;
+        overflow: initial;
       }
 
       .list-short-link-item-actions {
-        margin-right: 30px;
-
-        button {
-          border-radius: 10px;
-        }
+        height: 100%;
+        // margin-right: 30px;
 
         @media screen and (max-width: 576px) {
-          margin-right: 0px;
+          // margin-right: 0px;
+          position: absolute;
+          top: 0;
+          right: 0;
         }
       }
-      
+
+    }
+
+    .list-short-link-item-content {
+      .list-short-link-item-content-title {
+        font-size: larger;
+        font-weight: 500;
+      }
+
+      .list-short-link-item-content-url {
+        font-weight: 300;
+        font-style: oblique;
+      }
+
+      @media screen and (max-width: 576px) {
+        width: 100%;
+      }
+    }
+
+    .url-copied-success {
+      @media screen and (max-width: 576px) {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+      }
     }
   }
 }
@@ -73,7 +104,7 @@
 .url-copied-success {
   color: green;
   font-size: large;
-  
+
   span:last-child {
     margin-left: 5px;
   }
@@ -84,6 +115,7 @@
   opacity: 0;
   transition: visibility 1s, opacity 0.5s linear;
 }
+
 .showing {
   visibility: visible;
   transition: visibility 1s, opacity 0.5s linear;
