@@ -14,7 +14,7 @@ class authApi extends API {
     const url = 'sign_in';
 
     this.callLoginApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts, ...extraOpts }, (body: apiResponse<any>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.AUTH_LOGIN, data: body["data"] })
       } else {
         this.notify(body.meta.message)
@@ -27,7 +27,7 @@ class authApi extends API {
     const url = 'api/v1/social_auth/callback';
 
     this.callLoginApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts, ...extraOpts }, (body: apiResponse<any>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.AUTH_LOGIN, data: body["data"] })
       } else {
         this.notify(body.meta.message)
@@ -40,7 +40,7 @@ class authApi extends API {
     const url = 'sign_up';
 
     this.callApi(url, 'POST', { body: JSON.stringify(body), ...this.requestOpts }, (body: apiResponse<any>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.AUTH_SIGNUP, data: body["data"] })
         this.notify("Please check your registed email for verification")
       } else {
@@ -52,7 +52,7 @@ class authApi extends API {
   logout() {
     const url = 'sign_out';
     this.callLoginApi(url, 'DELETE', {}, (body: apiResponse<any>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.AUTH_LOGOUT })
         this.notify("Logged out successfully!")
       }

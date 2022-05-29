@@ -2,7 +2,7 @@ import React, { MouseEventHandler, useState } from "react";
 // import LeftMenu from "./left";
 // import RightMenu from "./right";
 import { Drawer, Button } from "antd";
-import { MenuOutlined, LogoutOutlined, LoginOutlined } from "@ant-design/icons";
+import { MenuOutlined, LogoutOutlined } from "@ant-design/icons";
 
 import NavbarItem from "./NavbarItem";
 import { AuthButton } from "../PageLayout";
@@ -14,7 +14,7 @@ type NavbarProps = {
   toLogin: MouseEventHandler<HTMLElement>
 }
 
-export default ({ token, logout, toLogin }: NavbarProps) => {
+const Navbar = ({ token, logout, toLogin }: NavbarProps) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -48,3 +48,5 @@ export default ({ token, logout, toLogin }: NavbarProps) => {
     </nav>
   );
 }
+
+export default Navbar;

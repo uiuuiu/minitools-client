@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import { toast, ToastOptions } from 'react-toastify';
 import config from './config';
 import { AppDispatch } from './store';
@@ -48,9 +47,8 @@ class API {
     }
   }
 
-  handleLoginResponse(headers: Headers, body: apiResponse<any>, cb: ({ data: { }, meta: { } }: apiResponse<any>) => void) {
+  handleLoginResponse(headers: Headers, body: apiResponse<any>, cb: ({ data, meta }: apiResponse<any>) => void) {
     try {
-      console.log('body', body)
       if (body.meta.error) {
         throw body.meta.error
       } else {

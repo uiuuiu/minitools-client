@@ -8,7 +8,7 @@ import apis from "../../apis";
 
 import "./Signup.scss";
 
-export default () => {
+const SignUp = () => {
   const dispatch = useDispatch();
   const api = apis(dispatch).authApi;
 
@@ -66,3 +66,5 @@ export default () => {
     </AuthLayout>
   );
 }
+
+export default SignUp;

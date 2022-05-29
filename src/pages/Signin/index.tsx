@@ -11,7 +11,7 @@ import { RootState } from "../../store";
 import { UserData } from '../../types/data/UserData';
 import { ValidateErrorEntity } from 'rc-field-form/lib/interface';
 
-export default () => {
+const SignIn = () => {
   const dispatch = useDispatch();
   const api = apis(dispatch).authApi;
 
@@ -109,6 +109,8 @@ export default () => {
   );
 }
 
-function GoogleUserData(data: { provider: string; uid: string; id_token: string; info: { email: string; }; }, GoogleUserData: any) {
-  throw new Error('Function not implemented.');
-}
+// function GoogleUserData(data: { provider: string; uid: string; id_token: string; info: { email: string; }; }, GoogleUserData: any) {
+//   throw new Error('Function not implemented.');
+// }
+
+export default SignIn;
