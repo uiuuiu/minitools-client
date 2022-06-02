@@ -1,8 +1,15 @@
 import { AnyAction } from 'redux';
 import { actions } from '../actions/commonActions';
+import { NotificationData } from '../types/data/NotificationData';
 
-const initialState = {
-  selectedApp: '/short_links'
+interface actionsState {
+  selectedApp: string,
+  notifications: NotificationData[]
+}
+
+const initialState: actionsState = {
+  selectedApp: '/short_links',
+  notifications: []
 }
 
 // Use the initialState as a default value
@@ -11,10 +18,16 @@ export default function commonReducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     // Do something here based on the different types of actions
 
-    case actions.ACTONS_COMMON_APPS_SELECTED:
+    case actions.ACTIONS_COMMON_APPS_SELECTED:
       return {
         ...state,
         selectedApp: action.data
+      }
+    case actions.ACTIONS_COMMON_ADD_NOTIFICATION:
+      const notifications = [...state.notifications, action.data];
+      return {
+        ...state,
+        notifications: notifications
       }
     default:
       // If this reducer doesn't recognize the action type, or doesn't

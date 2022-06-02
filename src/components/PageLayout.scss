@@ -5,7 +5,7 @@
   }
 
   .background-img {
-    background: linear-gradient(180deg,#002342,#0bc9e3 132.49%);
+    background: linear-gradient(180deg, #002342, #0bc9e3 132.49%);
     background-attachment: fixed;
     background-color: #002342;
     background-size: cover;
@@ -114,6 +114,7 @@
 
       .ant-card-body {
         padding: 0;
+
         @media screen and (max-width: 576px) {
           padding: 0;
           border: 0px;

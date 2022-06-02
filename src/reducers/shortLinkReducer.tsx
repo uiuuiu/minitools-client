@@ -11,19 +11,6 @@ interface shortLinkData {
   active: boolean;
 }
 
-// interface shortLinkInitialState {
-//   shortLinks: shortLinkData[];
-//   shortLink?: shortLinkData,
-//   redirectLoading: boolean,
-//   paginationOpts: {
-//     current?: number,
-//     pageSize: number | null,
-//     pageSizeOptions?: string[],
-//     total?: number
-//   },
-//   query: any
-// }
-
 const initialState = {
   shortLinks: [],
   shortLink: null,

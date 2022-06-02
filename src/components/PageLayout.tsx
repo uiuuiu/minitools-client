@@ -6,6 +6,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from "./Navbar";
+import UserBoard from "./UserBoard";
 import "./PageLayout.scss";
 
 import apis from "../apis";
@@ -31,7 +32,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   const dispatch = useDispatch();
   const api = apis(dispatch).authApi;
   const action = actions(dispatch).commonActions;
-  const { selectedApp } = useSelector((state: RootState) => state.actions.common);
+  const { selectedApp, notifications } = useSelector((state: RootState) => state.actions.common);
   const { token } = useSelector((state: RootState) => state.auth)
 
   const navigation = useNavigate();
@@ -56,7 +57,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
   const [windowDimenion, detectHW] = useState({
     winWidth: window.innerWidth,
     winHeight: window.innerHeight,
-  })
+  });
 
   const detectSize = () => {
     detectHW({
@@ -65,7 +66,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
     })
 
     setIsMobile(window.innerWidth < 576)
-  }
+  };
 
   useEffect(() => {
     window.addEventListener('resize', detectSize)
@@ -73,7 +74,24 @@ const PageLayout = ({ children }: PageLayoutProps) => {
     return () => {
       window.removeEventListener('resize', detectSize)
     }
-  }, [windowDimenion])
+  }, [windowDimenion]);
+
+  useEffect(() => {
+    const syncLocalShortLinkNotification = notifications.find(noti => noti.template === 'sync_local_short_links');
+    if (syncLocalShortLinkNotification) return;
+    const localShortLinks = JSON.parse(localStorage.getItem('localShortLinks') || JSON.stringify([]));
+    if (localShortLinks.length > 0) {
+      action.addNotification({
+        data: {
+          id: 0,
+          content: `You are having ${localShortLinks.length} shorterned urls can be synced to your current account.`,
+          createdAt: (new Date()).toString(),
+          read: false,
+          template: 'sync_local_short_links'
+        }
+      })
+    }
+  }, [])
 
   return (
     <Layout style={{ width: '100vw', minHeight: '100vh' }} className="page-layout">
@@ -136,7 +154,8 @@ export const AvatarButton = ({ token, popupVisible, setPopupVisible }: { token: 
 
   return (
     <Popover
-      content={"Hello"}
+      className="user-board-popover"
+      content={<UserBoard />}
       trigger="click"
       visible={popupVisible}
       onVisibleChange={handlePopupVisibleChange}
