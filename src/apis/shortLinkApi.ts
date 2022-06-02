@@ -23,7 +23,7 @@ class shortLinkApi extends API {
     const url = queryString.stringifyUrl({ url: 'api/v1/shorted_links', query: query });
 
     this.callAuthApi(url, 'GET', { ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData[]>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.SHORTLINK_LIST, data: body["data"], meta: body["meta"] })
       } else {
         this.notify("Cannot get items now")
@@ -34,7 +34,7 @@ class shortLinkApi extends API {
   getRedirectLink(urlKey: string) {
     const url = queryString.stringifyUrl({ url: `r/${urlKey}` });
     this.callAuthApi(url, 'GET', { ...this.authRequestOpts }, (body: apiResponse<RedirectLinkData>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.SHORTLINK_REDIRECT, data: body["data"] })
       } else {
         this.notify("Cannot get item now")
@@ -47,7 +47,7 @@ class shortLinkApi extends API {
     const url = 'api/v1/shorted_links';
 
     this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.SHORTLINK_CREATE, data: body.data })
         this.notify("Url was shortern")
       } else {
@@ -61,7 +61,7 @@ class shortLinkApi extends API {
     const url = 'api/v1/sync_local_shorted_links';
 
     this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.SHORTLINK_SYNC, data: body.data })
         this.notify("All local links were synced")
       } else {
@@ -75,7 +75,7 @@ class shortLinkApi extends API {
     const url = 'api/v1/public_shorted_links';
 
     this.callAuthApi(url, 'POST', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.PUBLIC_SHORTLINK_CREATE, data: body.data })
         this.notify("Url was shortern")
         if (cb) cb(body.data);
@@ -90,7 +90,7 @@ class shortLinkApi extends API {
     const url = `api/v1/shorted_links/${id}`;
 
     this.callAuthApi(url, 'PUT', { body: JSON.stringify(body), ...this.authRequestOpts, ...extraOpts }, (body: apiResponse<ShortLinkData>) => {
-      if (body.meta.status == 200) {
+      if (body.meta.status === 200) {
         this.dispatch({ type: actions.SHORTLINK_ACTIVE, data: body.data })
         this.notify(`Url was set to ${body.data.active ? 'active' : 'deactive'}`)
       } else {

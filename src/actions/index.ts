@@ -2,6 +2,8 @@ import commonActions from "./commonActions";
 
 import { AppDispatch } from '../store';
 
-export default (dispatch: AppDispatch) => ({
+const actions = (dispatch: AppDispatch) => ({
   commonActions: new commonActions(dispatch),
 });
+
+export default actions;

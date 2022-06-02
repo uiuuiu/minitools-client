@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Row, Col, Button, Image, Pagination, Input, Popover, Switch } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import { EllipsisOutlined, CheckCircleOutlined, PlusCircleTwoTone, DeleteTwoTone, CloudSyncOutlined, MoreOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, PlusCircleTwoTone, DeleteTwoTone, CloudSyncOutlined, MoreOutlined } from "@ant-design/icons";
 import AppContent from "../../components/AppContent";
 import ContentHeaderBar from "../../components/AppContentHeaderBar";
 
@@ -21,7 +21,7 @@ type searchData = {
   search?: string
 }
 
-export default () => {
+const List = () => {
   const dispatch = useDispatch();
   const api = apis(dispatch).shortLinkApi;
   const navigation = useNavigate();
@@ -40,6 +40,8 @@ export default () => {
 
     api.getShortLinks(data);
     setSearchParams(data);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, searchString])
 
   const handlePageChange = (page: number, pageSize: number) => {
@@ -92,7 +94,7 @@ export default () => {
 
 const SyncLinksButton = ({ handleSync }: { handleSync: () => void }) => {
   const localLinks = JSON.parse(localStorage.getItem('localShortLinks') || JSON.stringify([]));
-  if (localLinks.length == 0) return <></>
+  if (localLinks.length === 0) return <></>
 
   return (
     <Button type="link" onClick={handleSync} icon={<CloudSyncOutlined style={{ fontSize: '25px' }} title="There are some shortened links can sync to your account" />} />
@@ -144,7 +146,7 @@ const ShortLink = ({ record }: { record: ShortLinkData }) => {
         <div className="list-short-link-item-actions">
           <Popover
             content={<PopupMoreButton record={record} />}
-            title={<a onClick={(e) => hidePopup(e)}>Close</a>}
+            title={<Button type="link" onClick={(e) => hidePopup(e)}>Close</Button>}
             trigger="click"
             visible={popupVisible}
             onVisibleChange={handlePopupVisibleChange}
@@ -181,3 +183,5 @@ const PopupMoreButton = ({ record }: { record: ShortLinkData }) => {
     </div>
   )
 }
+
+export default List;
